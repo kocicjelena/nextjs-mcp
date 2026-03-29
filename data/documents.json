@@ -1,0 +1,14 @@
+[
+  {
+    "id": "doc_1",
+    "title": "Next.js Performance Best Practices",
+    "text": "Next.js offers several optimization techniques to improve application performance, including image optimization, automatic code splitting, static site generation (SSG), and server-side rendering (SSR).",
+    "url": "https://nextjs.org/docs/performance"
+  },
+  {
+    "id": "doc_2",
+    "title": "React Server Components Guide",
+    "text": "React Server Components allow rendering on the server and streaming to the client, reducing bundle size and improving initial load times.",
+    "url": "https://react.dev"
+  }
+]
