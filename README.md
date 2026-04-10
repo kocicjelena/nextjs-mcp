@@ -1,19 +1,7 @@
 
-## MCP SERVER for RAG 
+## MCP SERVER for RAG - mcp app in Next.js
 
-# TO DO
-Collect responses to build embedings
-
-## mcp app in Next.js
-
-stdio runner
-
-Run these commands:
-
-npm install
-npm run mcp-stdio # start the stdio runner
-npm run test-stdio # run the test harness (it spawns the runner and prints responses)
-
+## LED BY mcp plugin from claude
 ## App workflow in progress
 ```
 Browser (user)
@@ -38,22 +26,14 @@ Claude (AI)
   └─ Composes answer with citations
 ```
 
-## LED BY mcp plugin from claude
+## TO DO
 
-
-```json
-{
-  "scripts": {
-    "mcp:stdio": "tsx scripts/mcp-stdio.ts"
-  }
-}
-```
-
-Run: `npm run mcp:stdio`
+- Collect responses to build embedings
+- make context and db
 
 ---
 
-## 5. Claude Desktop config (`mcp.json`)
+## Claude Desktop config (`mcp.json`)
 
 For the HTTP server (Claude Desktop ≥ 0.10 with remote MCP support):
 
@@ -67,6 +47,32 @@ For the HTTP server (Claude Desktop ≥ 0.10 with remote MCP support):
   }
 }
 ```
+
+
+## stdio runner
+
+Run these commands:
+
+npm install
+
+npm run mcp-stdio # start the stdio runner
+
+npm run test-stdio # run the test harness (it spawns the runner and prints responses)
+
+
+## 
+
+
+```json
+{
+  "scripts": {
+    "mcp:stdio": "tsx scripts/mcp-stdio.ts"
+  }
+}
+```
+
+Run: `npm run mcp:stdio`
+
 
 For the stdio script:
 
@@ -89,7 +95,7 @@ Config file location:
 
 ---
 
-## 6. Testing with MCP Inspector
+## Testing with MCP Inspector
 
 ```bash
 # Install once
