@@ -1,8 +1,12 @@
+import Link from "next/dist/client/link"
+
 export default function HomePage() {
   return (
     <div>
-      <h1>MCP for ChatGPT Deep Research</h1>
-      
+      <h1>MCP server to use in chat</h1>
+      <Link href="/arhiva">Go to Archive</Link>
+      <Link href='/mcp'>Go to MCP</Link>
+      <Link href='/pdfarhiva'>Go to pdfs</Link>
       <p>Protocol is mounted below /mcp.</p>
       
       <p>

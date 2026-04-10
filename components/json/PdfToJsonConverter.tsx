@@ -634,7 +634,7 @@ export default function PdfToJsonConverter() {
                   className={`copy-btn ${copied ? "copied" : ""}`}
                   onClick={handleCopy}
                 >
-                  {copied ? "✓ copied" : "copy"}
+            COPY      {copied ? "✓ copied" : "copy"}
                 </button>
               </div>
               <div

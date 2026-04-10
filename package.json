@@ -7,7 +7,8 @@
     "mcp-stdio": "tsx scripts/mcp-stdio.ts",
     "test-stdio": "node scripts/test-stdio.mjs",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "mcp:stdio": "tsx scripts/mcp-stdio.ts"
   },
   "dependencies": {
     "mcp-handler": "^1.0.1",

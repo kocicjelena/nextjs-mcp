@@ -373,7 +373,7 @@ function cleanMarkdown(raw: string): string {
   t = t.replace(/^\|?[\s:|-]+\|[\s:|-]*\|?$/gm, "");
 
   // 9. Bold / italic / strikethrough — unwrap markers
-  t = t.replace(/(\*{1,3}|_{1,3})(.*?)\1/gs, "$2");
+ // t = t.replace(/(\*{1,3}|_{1,3})(.*?)\1/gs, "$2");
   t = t.replace(/~~(.*?)~~/g, "$1");
 
   // 10. Images — drop entirely (no useful text in most cases, alt text often redundant)
