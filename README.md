@@ -3,14 +3,15 @@
 
 ## LED BY mcp plugin from claude
 ## App workflow in progress
+Fix: fs is only used in server-side contexts like getStaticProps, getServerSideProps, API routes, or Server Actions.
 ```
 Browser (user)
-  ├─ Uploads PDFs to PdfToJsonConverter
+  ├─ Uploads filess to PdfToJsonConverter or DocToJsonConverter
   ├─ Reviews / edits entries
   ├─ Clicks "Download JSON"  →  pdf-documents.json
   │
   └─ (Option A) Places file at data/documents.json
-     (Option B) Clicks "Push to server"  →  POST /api/docs
+     (Option B) Clicks "Push to server"  →  POST /api/docs => response is for RAG dev in app
 
 Next.js server
   ├─ app/api/[transport]/route.ts  receives MCP request from Claude
@@ -18,11 +19,19 @@ Next.js server
   ├─ registerAllTools(server, docs)
   │   ├─ registerSearchTool  — keyword search over docs
   │   └─ registerFetchTool   — full text by id
+  │   └─ registerIngestTool   — get prompt answer as object
+  │   └─ registerSkillDispatchTool   — skillsmanagement (what plugin would do)
+  │   └─ registerSkillool   — skill from skills in local
+  │   └─ ... 
   └─ Returns MCP response
 
 Claude (AI)
   ├─ Calls "search" tool  →  gets ranked snippets
-  ├─ Calls "fetch" tool   →  gets full document text
+  ├─ Calls "fetch" tool   →  gets full document 
+  ├─ Calls "ingest" tool   →  get response as input in app
+  ├─ Calls "skill dispatcher" tool   →  skill management
+  ├─ Calls "skill as a tool" tool   →  gets skill as a tool 
+  text
   └─ Composes answer with citations
 ```
 

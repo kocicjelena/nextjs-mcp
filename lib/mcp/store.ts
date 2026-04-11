@@ -1,4 +1,5 @@
-import { readFile } from "fs/promises";
+//import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "path";
 import { DocEntry } from "@/types/doc-entry";
 
