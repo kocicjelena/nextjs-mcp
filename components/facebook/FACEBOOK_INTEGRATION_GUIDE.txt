@@ -1,0 +1,219 @@
+// FACEBOOK MCP INTEGRATION GUIDE
+// Facebook tools for Next.js MCP server
+
+// ============================================================================
+// STEP 1: Add the service files to your project
+// ============================================================================
+
+/*
+
+
+// ============================================================================
+// STEP 1: 
+// ============================================================================
+
+your-project/
+├── lib/
+│   ├── services/
+│   │   └── facebookService.ts          ← NEW
+│   ├── mcp/
+│   │   ├── tools/
+│   │   │   ├── facebookPost.ts         ← NEW
+│   │   │   ├── facebookPageInfo.ts     ← NEW
+│   │   │   └── ... existing tools
+│   │   ├── registry.ts                 ← UPDATE (see STEP 3)
+│   │   └── ... other MCP files
+│   └── ... other libraries
+├── .env.local                          ← UPDATE (see STEP 2)
+└── ...
+
+*/
+
+// ============================================================================
+// STEP 2: Update your .env.local
+// ============================================================================
+
+/*
+Add these environment variables to your .env.local file:
+
+FACEBOOK_APP_ID=
+FACEBOOK_APP_SECRET=secret
+FACEBOOK_PAGE_ACCESS_TOKEN=token
+
+Replace "secret" and "token" with your actual Facebook credentials.
+
+To get these credentials:
+
+1. App ID:
+   - Go to https://developers.facebook.com/
+   - Select your app
+   - Go to Settings > Basic
+   - Copy the App ID
+
+2. App Secret:
+   - Same location as App ID in Settings > Basic
+   - Click "Show" and copy it
+
+3. Page Access Token:
+   - Go to your app dashboard
+   - Navigate to Tools > Graph API Explorer
+   - Select your page in the dropdown
+   - Select "get_page_messages" or similar permissions
+   - Generate an access token
+   - Or: Page Settings > Messenger > Generate new token
+
+*/
+
+// ============================================================================
+// STEP 3: Update your lib/mcp/registry.ts
+// ============================================================================
+
+/*
+Update your existing registry.ts to import and register the Facebook tools:
+
+FROM:
+---
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { DocEntry } from "@/types/doc-entry";
+import { registerSearchTool } from "./tools/search";
+import { registerFetchTool } from "./tools/fetch";
+
+export function registerAllTools(server: McpServer, docs: DocEntry[]) {
+  registerSearchTool(server, docs);
+  registerFetchTool(server, docs);
+}
+
+TO:
+---
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { DocEntry } from "@/types/doc-entry";
+import { registerSearchTool } from "./tools/search";
+import { registerFetchTool } from "./tools/fetch";
+import { registerFacebookPostTool } from "./tools/facebookPost";           ← ADD THIS
+import { registerFacebookPageInfoTool } from "./tools/facebookPageInfo";   ← ADD THIS
+import { createFacebookService } from "@/lib/services/facebookService";    ← ADD THIS
+
+export function registerAllTools(server: McpServer, docs: DocEntry[]) {
+  registerSearchTool(server, docs);
+  registerFetchTool(server, docs);
+  
+  // Facebook tools
+  try {
+    const fbService = createFacebookService();                            ← ADD THIS
+    registerFacebookPostTool(server, fbService);                          ← ADD THIS
+    registerFacebookPageInfoTool(server, fbService);                      ← ADD THIS
+  } catch (error) {
+    console.warn("Facebook service not configured:", error);
+  }
+}
+
+Note: We wrap the Facebook tools in a try/catch because if credentials
+aren't set, we want the rest of your MCP server to continue working.
+
+*/
+
+// ============================================================================
+// STEP 4: Verify your dependencies
+// ============================================================================
+
+/*
+Make sure you have axios installed. Run:
+
+npm install axios
+
+If it's already installed, you don't need to do anything.
+
+*/
+
+// ============================================================================
+// STEP 5: Test it out
+// ============================================================================
+
+/*
+1. Start your dev server:
+   npm run dev
+
+2. Open MCP Inspector to test the tools:
+   npx @modelcontextprotocol/inspector
+
+3. Connect to your server (http://localhost:3000/api/mcp)
+
+4. You should see two new tools:
+   - facebook_post_to_page
+   - facebook_get_page_info
+
+5. Try calling facebook_get_page_info with your page ID to verify credentials work.
+
+*/
+
+// ============================================================================
+// TOOL USAGE EXAMPLES
+// ============================================================================
+
+/*
+EXAMPLE 1: Get page information
+
+Input:
+{
+  "page_id": "your_page_id"
+}
+
+Output:
+{
+  "success": true,
+  "page": {
+    "id": "your_page_id",
+    "name": "Your Page Name",
+    "description": "Page description",
+    "followers_count": 1000,
+    "fan_count": 1000,
+    "category": "Business"
+  }
+}
+
+---
+
+EXAMPLE 2: Post to a page
+
+Input:
+{
+  "page_id": "your_page_id",
+  "message": "Check out our new product! 🚀",
+  "link": "https://your-website.com/product",
+  "image_url": "https://example.com/image.jpg"
+}
+
+Output:
+{
+  "success": true,
+  "post_id": "your_page_id_123456_78910",
+  "message": "Check out our new product! 🚀",
+  "created_time": "2024-01-15T10:30:00.000Z",
+  "permalink_url": "https://www.facebook.com/your_page_id/posts/123456",
+  "summary": "Post successfully published to page your_page_id"
+}
+
+*/
+
+// ============================================================================
+// NEXT STEPS
+// ============================================================================
+
+/*
+After getting the basic setup working, you can extend this with:
+
+1. registerFacebookGetPostsTool - Retrieve recent posts from a page
+2. registerFacebookDeletePostTool - Delete posts
+3. registerFacebookInsightsTool - Get page insights and analytics
+4. registerFacebookCommentsTool - Manage comments on posts
+5. registerFacebookSchedulePostTool - Schedule posts for later
+
+Each follows the same pattern:
+- Add a method to FacebookService
+- Create a new tool file in lib/mcp/tools/
+- Register it in lib/mcp/registry.ts
+
+*/
+
+Claude primer 'post this marketing message to your Facebook page'
+

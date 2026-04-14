@@ -9,6 +9,7 @@ Browser (user)
   ├─ Uploads filess to PdfToJsonConverter or DocToJsonConverter
   ├─ Reviews / edits entries
   ├─ Clicks "Download JSON"  →  pdf-documents.json
+  ├─ Clicks "Download JSON"  →  doc-documents.json
   │
   └─ (Option A) Places file at data/documents.json
      (Option B) Clicks "Push to server"  →  POST /api/docs => response is for RAG dev in app
