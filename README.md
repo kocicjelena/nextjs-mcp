@@ -1,7 +1,8 @@
 
 ## MCP SERVER for RAG - mcp app in Next.js
 
-## LED BY mcp plugin from claude
+## LED BY mcp plugin from claude and https://modelcontextprotocol.io/ Documentation
+
 ## App workflow in progress
 Fix: fs is only used in server-side contexts like getStaticProps, getServerSideProps, API routes, or Server Actions.
 ```

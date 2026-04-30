@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "mcp-handler": "^1.0.1",
-    "next": "^15.5.14",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "redis": "^4.7.0",
@@ -20,7 +19,9 @@
   "devDependencies": {
     "@types/node": "^20.19.39",
     "@types/react": "^19",
+    "axios": "^1.15.2",
     "mammoth": "^1.12.0",
+    "next": "^16.2.4",
     "pdfjs-dist": "^5.5.207",
     "tsx": "^3.12.7",
     "typescript": "^5"
