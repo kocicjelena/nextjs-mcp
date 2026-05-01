@@ -2,6 +2,31 @@
 
 ## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
 
+Run these commands:
+
+npm install
+
+npm run dev
+
+## showcase 
+Make post on Facebook using this app, your new AI agent  (he is not learning, yet)
+http://localhost:3000/facebook
+
+Upload .doc, .docx, .txt, or .md.
+File is converted into JSON-like doc entry { id, title, text, url } and shown in preview.
+Extracted text becomes editable post draft.
+Choose tool from registered Facebook MCP tools:
+facebook_get_page_info
+facebook_post_to_page
+Tool args are editable; for post tool, message is auto-filled from draft.
+Submit calls Facebook tool through facebookService.ts via MCP.
+Notes
+
+This flow requires env vars:
+FACEBOOK_APP_ID
+FACEBOOK_APP_SECRET
+FACEBOOK_PAGE_ACCESS_TOKEN
+
 ## MCP tools localy, in app itself:
 Dropdown is populated from registered MCP tools.
 Selecting a tool shows dynamic argument fields from its schema.

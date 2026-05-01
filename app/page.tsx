@@ -18,6 +18,9 @@ export default function HomePage() {
       <Link href='/apptool'>Go to chat using made tool in this app</Link>
       <br />
       <Link href='/ragtool'>Go to chat using made tool in this app and your documents uploaded</Link>
+      <br />
+      <h2>showcase, makeuse of this repo</h2>
+      <Link href='/facebook'>Make post on Facebook using this app, your new AI agent</Link>
       <p>Protocol mcp in app minimized to local development</p>
       
    

@@ -43,7 +43,7 @@ export class FacebookService {
 
     // Create axios instance with base URL for Graph API
     this.client = axios.create({
-      baseURL: "https://graph.instagram.com/v18.0",
+      baseURL: "https://graph.facebook.com/v18.0",
       timeout: 10000,
     });
   }
