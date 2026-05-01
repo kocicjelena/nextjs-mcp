@@ -1,31 +1,28 @@
-import type { AuthProvider, Prompt, Resource, Tool } from '@modelcontextprotocol/client';
-import {
-    applyMiddlewares,
-    Client,
-    ClientCredentialsProvider,
-    createMiddleware,
-    CrossAppAccessProvider,
-    discoverAndRequestJwtAuthGrant,
-    PrivateKeyJwtProvider,
-    ProtocolError,
-    SdkError,
-    SdkErrorCode,
-    SSEClientTransport,
-    StreamableHTTPClientTransport
-} from '@modelcontextprotocol/client';
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
+const DEFAULT_MCP_PATH = "/api/mcp-stream/mcp";
 
-const url = 'http://localhost:3000/api/mcp-stream';
-const baseUrl = new URL(url);
-export async function mcpClient(){
-try {
-    // Try modern Streamable HTTP transport first
-    const client = new Client({ name: 'my-mcp-client', version: '1.0.0' });
-    const transport = new StreamableHTTPClientTransport(baseUrl);
-    await client.connect(transport);
-    return { client, transport };
-} catch {
-    // Fall back to legacy SSE transport
-   console.log("fallback not implemented yet")
+function resolveBaseUrl(origin?: string): URL {
+  if (origin) {
+    return new URL(DEFAULT_MCP_PATH, origin);
+  }
+
+  if (typeof window !== "undefined") {
+    return new URL(DEFAULT_MCP_PATH, window.location.origin);
+  }
+
+  return new URL(`http://localhost:3000${DEFAULT_MCP_PATH}`);
 }
+
+export async function mcpClient(origin?: string) {
+  const client = new Client(
+    { name: "nextjs-mcp-tool-client", version: "1.0.0" },
+    { capabilities: {} }
+  );
+
+  const transport = new StreamableHTTPClientTransport(resolveBaseUrl(origin));
+  await client.connect(transport);
+
+  return { client, transport };
 }

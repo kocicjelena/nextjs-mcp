@@ -1,22 +1,15 @@
-Fist next to do: make client for mcp-stream server and call the tool for test
 
-## MCP SERVER for RAG - mcp app in Next.js
 
-## MCP tools i development for comunicating to external systems
+## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
+
+## MCP tools localy, in app itself:
+Dropdown is populated from registered MCP tools.
+Selecting a tool shows dynamic argument fields from its schema.
+Submit calls the selected MCP tool directly.
+Response is shown as simple answer + raw tool payload.
 
 ## LED BY mcp plugin from claude and https://modelcontextprotocol.io/ Documentation
 
-## App workflow in progress
-Fix: fs is only used in server-side contexts like getStaticProps, getServerSideProps, API routes, or Server Actions.
-```
-Browser (user)
-  ├─ Uploads filess to PdfToJsonConverter or DocToJsonConverter
-  ├─ Reviews / edits entries
-  ├─ Clicks "Download JSON"  →  pdf-documents.json
-  ├─ Clicks "Download JSON"  →  doc-documents.json
-  │
-  └─ (Option A) Places file at data/documents.json
-     (Option B) Clicks "Push to server"  →  POST /api/docs => response is for RAG dev in app
 
 Next.js server
   ├─ app/api/[transport]/route.ts  receives MCP request from Claude
@@ -40,12 +33,7 @@ Claude (AI)
   └─ Composes answer with citations
 ```
 
-## TO DO
 
-- Collect responses to build embedings
-- make context and db
-
----
 
 ## Claude Desktop config (`mcp.json`)
 
@@ -56,14 +44,19 @@ For the HTTP server (Claude Desktop ≥ 0.10 with remote MCP support):
   "mcpServers": {
     "my-docs": {
       "type": "http",
-      "url": "http://localhost:3000/api/mcp"
+      "url": "http://localhost:3000/api/mcp-stream/mcp"
     }
   }
 }
 ```
 
 
-## stdio runner
+## stdio runner - PERFECT
+
+App workflow in progress
+Fix: fs is only used in server-side contexts like getStaticProps, getServerSideProps, API routes, or Server Actions.
+```
+
 
 Run these commands:
 
@@ -127,3 +120,10 @@ npx @modelcontextprotocol/inspector --transport stdio npm run mcp:stdio
 
 The Inspector opens a browser UI where you can call tools manually and inspect
 request/response pairs.
+
+
+## TO DO
+
+- Collect responses to build embedings
+
+---
