@@ -1,3 +1,4 @@
+Fist next to do: make client for mcp-stream server and call the tool for test
 
 ## MCP SERVER for RAG - mcp app in Next.js
 

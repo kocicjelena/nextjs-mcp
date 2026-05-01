@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from "react";
 import * as mammoth from "mammoth";
+import { useContextActions, useContextState } from "@/context/GlobalContext";
 
 interface DocEntry {
   id: number;
@@ -451,6 +452,11 @@ function titleFromFilename(name: string): string {
 
 
 export default function DocToJsonConverter() {
+  
+  const { pdf } = useContextState();
+  const { setPdfEntries, setPdfLoading, setPdfError, clearPdfEntries, fetchPdfFromApi } = useContextActions();
+  
+
   const [entries, setEntries] = useState<DocEntry[]>([]);
   const [fileStatuses, setFileStatuses] = useState<FileStatus[]>([]);
   const [dragOver, setDragOver] = useState(false);
@@ -539,7 +545,10 @@ export default function DocToJsonConverter() {
   };
 
   const handleCopy = async () => {
+    const out = getJsonOutput() as any
+    await setPdfEntries([out]);
     await navigator.clipboard.writeText(getJsonOutput());
+
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };

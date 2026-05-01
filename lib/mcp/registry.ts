@@ -6,6 +6,7 @@ import { registerSkillDispatcherTool } from "./tools/skill-dispatcher";
 import { registerIngestTool } from "./tools/ingest";
 import { registerHelloTool } from "./tools/hello";
 import { registerMySkillTool } from "./tools/skill-doc-to-json";
+import { registerFacebookPostTool } from "./tools/facebookPost";
 
 // TO DO: Implement ingestFunction
 const ingestFunction = async (doc: DocEntry) => {
@@ -17,7 +18,7 @@ const ingestFunction = async (doc: DocEntry) => {
 // replace my-skill with actual skill from skills (local)
 const myskill = 'my-skill'
 
-export function registerAllTools(server: McpServer, docs: DocEntry[]) {
+export function registerAllTools(server:any, docs: DocEntry[]) {
   registerSearchTool(server, docs);
   registerFetchTool(server, docs);
   registerSkillDispatcherTool(server);

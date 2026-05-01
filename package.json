@@ -10,6 +10,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@modelcontextprotocol/node": "^2.0.0-alpha.2",
+    "@modelcontextprotocol/server": "^2.0.0-alpha.2",
     "mcp-handler": "^1.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
