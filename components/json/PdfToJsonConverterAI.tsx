@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useContextState, useContextActions } from "@/context/GlobalContext";
 
 // pdfjs-dist must be installed: npm install pdfjs-dist
 // The worker URL must point to the matching version's worker file.
@@ -6,7 +7,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 //   pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 
 interface DocEntry {
-  id: number;
+  id: number | string;
   title: string;
   text: string;
   url: string;
@@ -405,12 +406,28 @@ function titleFromFilename(name: string): string {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function PdfToJsonConverter() {
-  const [entries, setEntries] = useState<(DocEntry & { pages?: number })[]>([]);
+  const { pdf } = useContextState();
+  const { setPdfEntries, setPdfLoading, setPdfError, clearPdfEntries, fetchPdfFromApi } = useContextActions();
+  
+  const [localEntries, setLocalEntries] = useState<(DocEntry & { pages?: number })[]>([]);
   const [fileStatuses, setFileStatuses] = useState<FileStatus[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [copied, setCopied] = useState(false);
   const [pdfJsReady, setPdfJsReady] = useState(false);
   const nextId = useRef(1);
+
+  // Sync local state with context when context entries change
+  useEffect(() => {
+    if (pdf.entries.length > 0) {
+      setLocalEntries(pdf.entries.map(e => ({ 
+        ...e, 
+        pages: undefined,
+        url: e.url || '' 
+      })));
+      const ids = pdf.entries.map(e => typeof e.id === 'number' ? e.id : 0);
+      nextId.current = Math.max(...ids, 0) + 1;
+    }
+  }, [pdf.entries]);
 
   useEffect(() => {
     loadPdfJs()
@@ -437,7 +454,7 @@ export default function PdfToJsonConverter() {
           url: "",
           pages,
         };
-        setEntries(prev => [...prev, entry]);
+        setLocalEntries(prev => [...prev, entry]);
         setFileStatuses(prev =>
           prev.map(s => s.name === file.name ? { ...s, status: "done" } : s)
         );
@@ -464,16 +481,16 @@ export default function PdfToJsonConverter() {
     e.target.value = "";
   }, [processFiles]);
 
-  const updateEntry = (id: number, field: keyof DocEntry, value: string) => {
-    setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e));
+  const updateEntry = (id: number | string, field: keyof DocEntry, value: string) => {
+    setLocalEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e));
   };
 
-  const removeEntry = (id: number) => {
-    setEntries(prev => prev.filter(e => e.id !== id));
+  const removeEntry = (id: number | string) => {
+    setLocalEntries(prev => prev.filter(e => e.id !== id));
   };
 
   const getJsonOutput = () => {
-    const clean = entries.map(({ id, title, text, url }) => {
+    const clean = localEntries.map(({ id, title, text, url }) => {
       const obj: Record<string, string | number> = { id, title, text };
       if (url.trim()) obj.url = url.trim();
       return obj;
@@ -482,13 +499,20 @@ export default function PdfToJsonConverter() {
   };
 
   const handlePush = async () => {
-  const res = await fetch("/api/docs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: getJsonOutput(),
-  });
-  if (!res.ok) throw new Error("Upload failed");
-};
+    setPdfLoading(true);
+    try {
+      const res = await fetch("/api/docs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: getJsonOutput(),
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setPdfEntries(localEntries);
+    } catch (error) {
+      setPdfError(String(error));
+    }
+  };
   const handleDownload = () => {
     const blob = new Blob([getJsonOutput()], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -499,13 +523,21 @@ export default function PdfToJsonConverter() {
     URL.revokeObjectURL(url);
   };
 
+  const handleClear = () => {
+    setLocalEntries([]);
+    setFileStatuses([]);
+    nextId.current = 1;
+    clearPdfEntries();
+  };
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(getJsonOutput());
+   // setPdfEntries(localEntries);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const jsonStr = entries.length ? getJsonOutput() : "";
+  const jsonStr = localEntries.length ? getJsonOutput() : "";
 
   return (
     <>
@@ -557,11 +589,11 @@ export default function PdfToJsonConverter() {
           </div>
         )}
 
-        {entries.length > 0 ? (
+        {localEntries.length > 0 ? (
           <>
             <div className="entries-section">
-              <div className="section-label">entries — {entries.length}</div>
-              {entries.map(entry => (
+              <div className="section-label">entries — {localEntries.length}</div>
+              {localEntries.map(entry => (
                 <div className="entry-card" key={entry.id}>
                   <div className="entry-header">
                     <span className="entry-id">#{entry.id}</span>
@@ -611,17 +643,13 @@ export default function PdfToJsonConverter() {
               <button
                 className="btn btn-primary"
                 onClick={handleDownload}
-                disabled={!entries.length}
+                disabled={!localEntries.length}
               >
                 ↓ Download JSON
               </button>
               <button
                 className="btn btn-ghost"
-                onClick={() => {
-                  setEntries([]);
-                  setFileStatuses([]);
-                  nextId.current = 1;
-                }}
+                onClick={handleClear}
               >
                 Clear all
               </button>
@@ -634,7 +662,7 @@ export default function PdfToJsonConverter() {
                   className={`copy-btn ${copied ? "copied" : ""}`}
                   onClick={handleCopy}
                 >
-                  {copied ? "✓ copied" : "copy"}
+            COPY      {copied ? "✓ copied" : "copy"}
                 </button>
               </div>
               <div
@@ -650,6 +678,7 @@ export default function PdfToJsonConverter() {
           </div>
         )}
       </div>
+      {pdf}
     </>
   );
 }

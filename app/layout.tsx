@@ -1,3 +1,5 @@
+import { Provider } from '@/context/GlobalContext';
+
 export const metadata = {
   title: 'ChatGPT Deep Research',
   description: 'ChatGPT-compatible MCP server for deep research',
@@ -10,7 +12,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   )
 }

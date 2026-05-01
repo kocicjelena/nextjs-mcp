@@ -1,7 +1,9 @@
 import ExpectedResponse from "@/components/mimic/Expected"
+import { useContextState } from "@/context/GlobalContext";
 import Link from "next/dist/client/link"
 
 export default function HomePage() {
+ 
   return (
     <>
     <div>

@@ -1,7 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { writeFile, readFile } from "fs/promises";
 import path from "path";
 import { DocEntry } from "@/types/doc-entry";
+
+export async function GET() {
+  try {
+    const dataDir = path.join(process.cwd(), "data");
+    const filePath = path.join(dataDir, "documents.json");
+    
+    try {
+      const data = await readFile(filePath, "utf-8");
+      const entries = JSON.parse(data) as DocEntry[];
+      return NextResponse.json(entries);
+    } catch (err) {
+      // File doesn't exist yet, return empty array
+      return NextResponse.json([]);
+    }
+  } catch (err: any) {
+    console.error("Get docs error:", err);
+    return NextResponse.json(
+      { error: String(err.message) },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

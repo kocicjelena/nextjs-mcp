@@ -1,6 +1,8 @@
 
 ## MCP SERVER for RAG - mcp app in Next.js
 
+## MCP tools i development for comunicating to external systems
+
 ## LED BY mcp plugin from claude and https://modelcontextprotocol.io/ Documentation
 
 ## App workflow in progress
