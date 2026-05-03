@@ -28,11 +28,11 @@
   "tools": [
     {
       "type": "mcp_toolset",
-      "mcp_server_name": "mcp-server-1"
+      "mcp_server_name": "mcp"
     },
     {
       "type": "mcp_toolset",
-      "mcp_server_name": "mcp-server-2",
+      "mcp_server_name": "mcp-stream",
       "default_config": {
         "defer_loading": true
       }
