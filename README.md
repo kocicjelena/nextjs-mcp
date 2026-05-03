@@ -1,4 +1,4 @@
-// TO DO: integrate official Antropic instead of AI Agent 
+// TO DO: integrate official Anthropic tools instead of some made by AI Agent 
 
 ## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
 
