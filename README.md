@@ -1,15 +1,16 @@
-# TO DO: integrate official Anthropic tools 
-
-
-
+# WebMCP in Next.js 
 ## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
+
+
+
+
+# TO DO: integrate official Anthropic tools 
 
 Run these commands:
 
 npm install
 
 npm run dev
-
 
 
 ## LED BY mcp plugin from claude and https://modelcontextprotocol.io/ Documentation
