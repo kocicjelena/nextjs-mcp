@@ -1,3 +1,4 @@
+[Screencast from 2026-05-10 14-41-11.webm](https://github.com/user-attachments/assets/efd01775-e6c5-4e6d-ac62-6b0a97493e4b)
 # WebMCP in Next.js 
 ## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
 
