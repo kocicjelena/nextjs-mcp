@@ -1,4 +1,6 @@
-// TO DO: integrate official Anthropic tools instead of some made by AI Agent 
+# TO DO: integrate official Anthropic tools 
+
+
 
 ## MCP SERVER and MCP CLIENT for RAG - mcp app in Next.js
 
@@ -122,7 +124,7 @@ Response is shown as simple answer + raw tool payload.
 
 App workflow in progress
 Fix: fs is only used in server-side contexts like getStaticProps, getServerSideProps, API routes, or Server Actions.
-```
+
 
 
 Run these commands:
