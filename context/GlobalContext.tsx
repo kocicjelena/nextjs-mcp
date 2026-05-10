@@ -1,11 +1,27 @@
 'use client';
 
-import { createContext, useContext, useReducer, useCallback, useMemo, ReactNode } from 'react';
-import { IContextState, IContextAction, PdfAction } from '../interfaces/ContextType';
-import { PdfEntryType, initialPdfEntry } from '../interfaces/PdfEntryType';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
+  useMemo,
+  ReactNode,
+} from 'react';
+import {
+  IContextState,
+  IContextAction,
+} from '../interfaces/ContextType';
 import actionTypes from '../interfaces/actionTypes';
 import { pdfReducer, initialState } from '../reducers/pdfReducer';
-import { DocEntry } from '@/types/doc-entry';
+import type {
+  AgentMessage,
+  RegisteredPromptEntry,
+  RegisteredResourceEntry,
+  RegisteredToolEntry,
+  SwStatus,
+} from '@/lib/types/navigator.types';
+import type { DocEntry } from '@/types/doc-entry';
 
 interface ContextValue {
   state: IContextState;
@@ -22,7 +38,7 @@ export function Provider({ children }: ProviderProps) {
   const [state, dispatch] = useReducer(pdfReducer, initialState);
 
   const setPdfLoading = useCallback((loading: boolean) => {
-    dispatch({ type: actionTypes.SET_PDF_LOADING });
+    dispatch({ type: actionTypes.SET_PDF_LOADING, payload: { loading } });
   }, []);
 
   const setPdfEntries = useCallback((entries: DocEntry[]) => {
@@ -30,7 +46,10 @@ export function Provider({ children }: ProviderProps) {
   }, []);
 
   const setPdfError = useCallback((error: string | null) => {
-    dispatch({ type: actionTypes.SET_PDF_ERROR, payload: { error: error ?? 'Unknown error' } });
+    dispatch({
+      type: actionTypes.SET_PDF_ERROR,
+      payload: { error: error ?? 'Unknown error' },
+    });
   }, []);
 
   const clearPdfEntries = useCallback(() => {
@@ -38,15 +57,58 @@ export function Provider({ children }: ProviderProps) {
   }, []);
 
   const fetchPdfFromApi = useCallback(async () => {
-    dispatch({ type: actionTypes.SET_PDF_LOADING });
+    dispatch({ type: actionTypes.SET_PDF_LOADING, payload: { loading: true } });
     try {
       const res = await fetch('/api/docs');
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       dispatch({ type: actionTypes.SET_PDF_ENTRIES, payload: { entries: data } });
     } catch (error) {
-      dispatch({ type: actionTypes.SET_PDF_ERROR, payload: { error: String(error) } });
+      dispatch({
+        type: actionTypes.SET_PDF_ERROR,
+        payload: { error: String(error) },
+      });
     }
+  }, []);
+
+  const addTool = useCallback((tool: RegisteredToolEntry) => {
+    dispatch({ type: actionTypes.ADD_TOOL, payload: { tool } });
+  }, []);
+
+  const removeTool = useCallback((name: string) => {
+    dispatch({ type: actionTypes.REMOVE_TOOL, payload: { name } });
+  }, []);
+
+  const addPrompt = useCallback((prompt: RegisteredPromptEntry) => {
+    dispatch({ type: actionTypes.ADD_PROMPT, payload: { prompt } });
+  }, []);
+
+  const removePrompt = useCallback((name: string) => {
+    dispatch({ type: actionTypes.REMOVE_PROMPT, payload: { name } });
+  }, []);
+
+  const addResource = useCallback((resource: RegisteredResourceEntry) => {
+    dispatch({ type: actionTypes.ADD_RESOURCE, payload: { resource } });
+  }, []);
+
+  const removeResource = useCallback((uri: string) => {
+    dispatch({ type: actionTypes.REMOVE_RESOURCE, payload: { uri } });
+  }, []);
+
+  const addMessage = useCallback((message: AgentMessage) => {
+    dispatch({ type: actionTypes.ADD_MESSAGE, payload: { message } });
+  }, []);
+
+  const updateLastAgentMessage = useCallback((token: string) => {
+    dispatch({ type: actionTypes.UPDATE_LAST_AGENT_MESSAGE, payload: { token } });
+  }, []);
+
+  const clearMessages = useCallback(() => {
+    dispatch({ type: actionTypes.CLEAR_MESSAGES });
+  }, []);
+
+  const setSwStatus = useCallback((status: SwStatus) => {
+    dispatch({ type: actionTypes.SET_SW_STATUS, payload: { status } });
   }, []);
 
   const value = useMemo(
@@ -58,16 +120,39 @@ export function Provider({ children }: ProviderProps) {
         setPdfError,
         clearPdfEntries,
         fetchPdfFromApi,
+        addTool,
+        removeTool,
+        addPrompt,
+        removePrompt,
+        addResource,
+        removeResource,
+        addMessage,
+        updateLastAgentMessage,
+        clearMessages,
+        setSwStatus,
       },
     }),
-    [state, setPdfEntries, setPdfLoading, setPdfError, clearPdfEntries, fetchPdfFromApi]
+    [
+      state,
+      setPdfEntries,
+      setPdfLoading,
+      setPdfError,
+      clearPdfEntries,
+      fetchPdfFromApi,
+      addTool,
+      removeTool,
+      addPrompt,
+      removePrompt,
+      addResource,
+      removeResource,
+      addMessage,
+      updateLastAgentMessage,
+      clearMessages,
+      setSwStatus,
+    ]
   );
 
-  return (
-    <GlobalContext.Provider value={value}>
-      {children}
-    </GlobalContext.Provider>
-  );
+  return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>;
 }
 
 export function useContextState() {
