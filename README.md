@@ -20,7 +20,7 @@ npm run dev
 
 For the HTTP server (Claude Desktop ≥ 0.10 with remote MCP support):
 
-```json
+json
 {
   "mcpServers": {
     "my-docs": {
@@ -137,9 +137,7 @@ npm run mcp-stdio # start the stdio runner
 
 npm run test-stdio # run the test harness (it spawns the runner and prints responses)
 
-
 ## 
-
 
 ```json
 {
@@ -154,7 +152,6 @@ Run: `npm run mcp:stdio`
 
 For the stdio script:
 
-```json
 {
   "mcpServers": {
     "my-docs-local": {
@@ -179,10 +176,8 @@ Config file location:
 npm install -g @modelcontextprotocol/inspector
 
 # Test HTTP transport
-npx @modelcontextprotocol/inspector http://localhost:3000/api/mcp
-
-# Test SSE transport
-npx @modelcontextprotocol/inspector --transport sse http://localhost:3000/api/sse
+npx @modelcontextprotocol/inspector http://localhost:3000/api/mcp-stream
+-
 
 # Test stdio
 npx @modelcontextprotocol/inspector --transport stdio npm run mcp:stdio
