@@ -169,11 +169,10 @@ Config file location:
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
----
+
 
 ## Testing with MCP Inspector
 
-```bash
 # Install once
 npm install -g @modelcontextprotocol/inspector
 
