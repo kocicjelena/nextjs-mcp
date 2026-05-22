@@ -5,6 +5,7 @@
 
 
 
+# Regret, huge refactoring demand of this mcp mix experiment, explained at: I use Claude Code and Codex together, and the combination does something neither can do alone https://share.google/0GgPdGCDGGsNibsGD
 # TO DO: integrate official Anthropic tools 
 
 Run these commands:
